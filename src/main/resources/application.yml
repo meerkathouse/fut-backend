@@ -1,0 +1,28 @@
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  datasource:
+    url: ENC(22leX22Zl1m0oc7ijKNmOJGhsvpyn3JrIcrIGy7jNd/2MvUydibnryBAbetCrEve2WC0WTR9Ljn829UTSeCgax0Q3veUYMOSVIm8spuIKrRZdG2Zn4JaZu2EsQEn5hnRCo4gW/XDcI3U0Eq70NE0XlhvxDLDdxHZ)
+    username: ENC(fzpPJIK8cCCFnlhfG73RdhK68pJAUizhEHXGNXvLk7Q=)
+    password: ENC(KeSXWwIj7qxI3+O4/cd1ryFjQafqzNR0ic1O8H0n2q3+0a7TR6YYag==)
+    driver-class-name: com.mysql.jdbc.Driver
+  thymeleaf:
+    cache: false
+    suffix: .html
+    prefix: classpath:/templates/
+  mvc:
+    static-path-pattern: /resources/static/
+
+socials:
+  kakao:
+    host: https://kauth.kakao.com
+    redirect_url: http://localhost:8080/oauth/kakao
+    grant_type: Authorization_code
+    client_id: ENC(+gsWBGs1mSvdUlTH04RfwhfAacrPISNrit/kkRutmi/V5jSddJsh38Kdn1unH+fVSeyJpY82AwDpZ91B8iaNLg==)
+    client_secret: ENC(UdR+FMbr4Wa7uNZw5F4rkYH9yehTjAGF6PhI5w7PnkYmLSQ2qUKLIXdEwYMsDc+ls3YlfJhRPKCU4084T4rpOQ==)
