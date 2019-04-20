@@ -1,16 +1,16 @@
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
-
+    
 spring:
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
   datasource:
-    url: ENC(22leX22Zl1m0oc7ijKNmOJGhsvpyn3JrIcrIGy7jNd/2MvUydibnryBAbetCrEve2WC0WTR9Ljn829UTSeCgax0Q3veUYMOSVIm8spuIKrRZdG2Zn4JaZu2EsQEn5hnRCo4gW/XDcI3U0Eq70NE0XlhvxDLDdxHZ)
-    username: ENC(fzpPJIK8cCCFnlhfG73RdhK68pJAUizhEHXGNXvLk7Q=)
-    password: ENC(KeSXWwIj7qxI3+O4/cd1ryFjQafqzNR0ic1O8H0n2q3+0a7TR6YYag==)
+    url: ENC(8FcC/aWEAlFvMdMtE+KVYsAZWZpVnCD0N4He1AttXgZMvDU7iSeiiGc6XKXtSn2VmACwx2D8KAFVh4afV9IddQ7hdFp/mwb89UkMh/aX0z0LQMVYxzV7fy8qnfONnz1/2mLznTHcL+kEVykWUwK7g5gvpdrJ02C/)
+    username: ENC(5ufiORGiaiClXRAeGun4SjAVKNtG1qKKyv69XDTSJDE=)
+    password: ENC(vX7qSexOA8YDkOJWxdJ4VYb0zLoi1NInJ4OQIhI1+q/i9sLcNTkx/Q==)
     driver-class-name: com.mysql.jdbc.Driver
   thymeleaf:
     cache: false
@@ -18,11 +18,14 @@ spring:
     prefix: classpath:/templates/
   mvc:
     static-path-pattern: /resources/static/
+  jackson:
+    serialization:
+      indent_output: true
 
 socials:
   kakao:
     host: https://kauth.kakao.com
     redirect_url: http://localhost:8080/oauth/kakao
     grant_type: Authorization_code
-    client_id: ENC(+gsWBGs1mSvdUlTH04RfwhfAacrPISNrit/kkRutmi/V5jSddJsh38Kdn1unH+fVSeyJpY82AwDpZ91B8iaNLg==)
-    client_secret: ENC(UdR+FMbr4Wa7uNZw5F4rkYH9yehTjAGF6PhI5w7PnkYmLSQ2qUKLIXdEwYMsDc+ls3YlfJhRPKCU4084T4rpOQ==)
+    client_id: ENC(ILEZvixqcNlh7OY3PnFbVd6Uo5U4mSvnzcQV8AjKkE5UgdI2yCmxALhVFBVEOnsOkeVh97B7cOIMgdb8Vr+YSw==)
+    client_secret: ENC(ORaAeOYI5hlB8gG+721btx77Uv9UGnaaUxDn6DxYtL8UbHAn9Df1ByiUUq4pI/zZJDTNenAsenv357UtrbA4Wg==)
