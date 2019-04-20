@@ -9,4 +9,7 @@ import lombok.*;
 @ToString
 public class UserModel {
     private String id;
+    private String nickname;
+    private String social;
+    private String imageUrl;
 }

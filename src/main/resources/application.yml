@@ -1,7 +1,7 @@
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
-    
+
 spring:
   jpa:
     hibernate:
@@ -25,7 +25,9 @@ spring:
 socials:
   kakao:
     host: https://kauth.kakao.com
-    redirect_url: http://localhost:8080/oauth/kakao
-    grant_type: Authorization_code
+    oauth_api: /oauth/authorize
+    token_api: /oauth/token
+    redirect_uri: http://localhost:8080/oauth/codes/kakao
+    grant_type: authorization_code
     client_id: ENC(ILEZvixqcNlh7OY3PnFbVd6Uo5U4mSvnzcQV8AjKkE5UgdI2yCmxALhVFBVEOnsOkeVh97B7cOIMgdb8Vr+YSw==)
     client_secret: ENC(ORaAeOYI5hlB8gG+721btx77Uv9UGnaaUxDn6DxYtL8UbHAn9Df1ByiUUq4pI/zZJDTNenAsenv357UtrbA4Wg==)
