@@ -1,6 +1,6 @@
 package com.meerkat.house.fut.controller.oauth;
 
-import com.meerkat.house.fut.model.UserModel;
+import com.meerkat.house.fut.model.Account;
 import com.meerkat.house.fut.service.social.SocialSelectFactory;
 import com.meerkat.house.fut.service.social.oauth.OauthService;
 import lombok.extern.slf4j.Slf4j;
@@ -24,10 +24,10 @@ public class OauthController {
 
     @RequestMapping(value = "/oauth/codes/{social}", method = RequestMethod.GET)
     public void oauthRedirectUrl(@PathVariable("social") String social,
-                                   @RequestParam("code") String code) {
+                                 @RequestParam("code") String code) {
         oauthService = socialSelectFactory.getSocialOauthService(social);
-        UserModel userModel = oauthService.getUserModel(code);
+        Account account = oauthService.getUserModel(code);
 
-        log.info("[ UserModel ] : {}", userModel.toString());
+        log.info("[ Account ] : {}", account.toString());
     }
 }

@@ -1,10 +1,12 @@
 package com.meerkat.house.fut.service.social.oauth.impl;
 
+import com.google.common.base.Strings;
 import com.meerkat.house.fut.exception.RestException;
 import com.meerkat.house.fut.exception.ResultCode;
+import com.meerkat.house.fut.model.Account;
 import com.meerkat.house.fut.model.kakao.KakaoTokenResponse;
-import com.meerkat.house.fut.model.UserModel;
 import com.meerkat.house.fut.model.kakao.user.KakaoUserResponse;
+import com.meerkat.house.fut.repository.AccountRepository;
 import com.meerkat.house.fut.service.social.oauth.OauthService;
 import com.meerkat.house.fut.utils.FutConstant;
 import lombok.extern.slf4j.Slf4j;
@@ -12,16 +14,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 @Service
 @Slf4j
+@Transactional
 public class KakaoOauthServiceImpl implements OauthService {
 
     @Value("${socials.kakao.host}")
@@ -45,37 +50,46 @@ public class KakaoOauthServiceImpl implements OauthService {
     @Value("${socials.kakao.token_api}")
     private String tokenApi;
 
-    @Autowired
+
     private RestTemplate restTemplate;
+    private AccountRepository accountRepository;
+
+    @Autowired
+    public KakaoOauthServiceImpl(RestTemplate restTemplate, AccountRepository accountRepository) {
+        this.restTemplate = restTemplate;
+        this.accountRepository = accountRepository;
+    }
 
     @Override
     public String getCodeUrl() {
-        String url = new StringBuilder(kakaoUrl)
-                .append(oauthApi)
-                .append("?client_id=")
-                .append(clientId)
-                .append("&redirect_uri=")
-                .append(URLEncoder.encode(redirectUri))
-                .append("&response_type=code")
-                .toString();
+        String url = null;
+
+        try {
+            url = new StringBuilder(kakaoUrl)
+                    .append(oauthApi)
+                    .append("?client_id=")
+                    .append(clientId)
+                    .append("&redirect_uri=")
+                    .append(URLEncoder.encode(redirectUri, "UTF-8"))
+                    .append("&response_type=code")
+                    .toString();
+        } catch (UnsupportedEncodingException e) {
+            log.error("url encoder error : {}", e.toString());
+        }
 
         return url;
     }
 
     @Override
-    public UserModel getUserModel(String code) {
-        KakaoTokenResponse kakaoTokenResponse = this.getAccessToken(code);
+    public Account getUserModel(String code) {
+        KakaoTokenResponse kakaoTokenResponse = this.getTokenFromSocial(code);
 
-        //  TODO. upsert token to database
-
-        String accessToken = new StringBuilder(kakaoTokenResponse.getTokenType())
-                .append(" ")
-                .append(kakaoTokenResponse.getAccessToken())
+        String accessToken = this.getAccessToken(kakaoTokenResponse);
+        String url = new StringBuilder(FutConstant.HOST_API)
+                .append(FutConstant.API_USER_ME)
                 .toString();
 
-        String url = new StringBuilder("https://kapi.kakao.com")
-                .append("/v2/user/me")
-                .toString();
+        log.info("[ kakao ] token response : {}", kakaoTokenResponse.toString());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -92,26 +106,71 @@ public class KakaoOauthServiceImpl implements OauthService {
             throw new RestException(ResultCode.NO_NAMING);
         }
 
-        if(null == response || null == response.getBody()) {
+        if (null == response || null == response.getBody()) {
             log.error("kakao get user : response or response.body is null");
             throw new RestException(ResultCode.NO_NAMING);
         }
 
         KakaoUserResponse kakaoUserResponse = response.getBody();
 
-        //  TODO. upsert user model
-        UserModel userModel = UserModel.builder()
-                .id(kakaoUserResponse.getId())
-                .nickname(kakaoUserResponse.getProperties().getNickname())
-                .imageUrl(kakaoUserResponse.getProperties().getThumbnailImage())
-                .social(FutConstant.KAKAO)
-                .build();
+        log.info("[ kakao ] user response : {}", kakaoUserResponse.toString());
 
-        return userModel;
+        return upsertUserModel(kakaoUserResponse, kakaoTokenResponse);
     }
 
+    private Account upsertUserModel(KakaoUserResponse kakaoUserResponse, KakaoTokenResponse kakaoTokenResponse) {
+        log.info("[ kakao ] upsert user-model. ");
+
+        String id = null, email = null, nickname = null, imageUrl = null;
+
+        if (!Strings.isNullOrEmpty(kakaoUserResponse.getId())) {
+            id = kakaoUserResponse.getId();
+        }
+
+        if (kakaoUserResponse.getKakaoAccount() != null && !Strings.isNullOrEmpty(kakaoUserResponse.getKakaoAccount().getEmail())) {
+            email = kakaoUserResponse.getKakaoAccount().getEmail();
+        }
+
+        if (kakaoUserResponse.getProperties() != null) {
+            if (!Strings.isNullOrEmpty(kakaoUserResponse.getProperties().getNickname())) {
+                nickname = kakaoUserResponse.getProperties().getNickname();
+            }
+            if (!Strings.isNullOrEmpty(kakaoUserResponse.getProperties().getThumbnailImage())) {
+                imageUrl = kakaoUserResponse.getProperties().getThumbnailImage();
+            }
+        }
+
+        Account account = accountRepository.findByIdAndEmailAndSocial(id, email, FutConstant.KAKAO);
+
+        //  TODO. upsert user model
+        if (null == account) {
+            log.info("[ kakao ] find user-model is null.");
+
+            account = new Account();
+            account.setId(id);
+            account.setEmail(email);
+            account.setNickname(nickname);
+            account.setImageUrl(imageUrl);
+            account.setSocial(FutConstant.KAKAO);
+        }
+
+        log.info("[ kakao ] find user-model : {}", account.toString());
+
+        if (!Strings.isNullOrEmpty(kakaoTokenResponse.getRefreshToken())) {
+            account.setRefreshToken(kakaoTokenResponse.getRefreshToken());
+        }
+
+        account.setAccessToken(kakaoTokenResponse.getAccessToken());
+
+        log.info("[ kakao ] save user-model : {}", account.toString());
+
+        accountRepository.save(account);
+        return account;
+    }
+
+
     @Override
-    public KakaoTokenResponse getAccessToken(String code) {
+    public KakaoTokenResponse getTokenFromSocial(String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -143,5 +202,12 @@ public class KakaoOauthServiceImpl implements OauthService {
         }
 
         return response.getBody();
+    }
+
+    private String getAccessToken(KakaoTokenResponse tokenResponse) {
+        return new StringBuilder(tokenResponse.getTokenType())
+                .append(" ")
+                .append(tokenResponse.getAccessToken())
+                .toString();
     }
 }

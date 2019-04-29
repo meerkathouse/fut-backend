@@ -8,7 +8,7 @@ spring:
       ddl-auto: update
     show-sql: true
   datasource:
-    url: ENC(8FcC/aWEAlFvMdMtE+KVYsAZWZpVnCD0N4He1AttXgZMvDU7iSeiiGc6XKXtSn2VmACwx2D8KAFVh4afV9IddQ7hdFp/mwb89UkMh/aX0z0LQMVYxzV7fy8qnfONnz1/2mLznTHcL+kEVykWUwK7g5gvpdrJ02C/)
+    url: ENC(YTqbVMjVqfEgp7hQLXl9RwbhKyybqMoQemVs0HFB1DDWfXmRPtzJ0KXMDPBJdE46QXGLF9Jl3FhUK2meJig+X5YKKlXkDixqXg3adL/9Q0SoJElIQAZ6HuEKLs+hDmQRWQWlo/rXOo64nx7APg8NFaF4o14tToUtRsGxnCQbf4Vshm3G18KOPg==)
     username: ENC(5ufiORGiaiClXRAeGun4SjAVKNtG1qKKyv69XDTSJDE=)
     password: ENC(vX7qSexOA8YDkOJWxdJ4VYb0zLoi1NInJ4OQIhI1+q/i9sLcNTkx/Q==)
     driver-class-name: com.mysql.jdbc.Driver

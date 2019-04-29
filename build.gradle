@@ -36,4 +36,8 @@ dependencies {
     //  jasypt
     compile group: 'com.github.ulisesbocchio', name: 'jasypt-spring-boot', version: '2.1.1'
 
+    //  security
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.1.4.RELEASE'
+    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.5.RELEASE'
+
 }
