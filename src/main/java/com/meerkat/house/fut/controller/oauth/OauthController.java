@@ -1,14 +1,21 @@
 package com.meerkat.house.fut.controller.oauth;
 
-import com.meerkat.house.fut.model.Account;
+import com.google.common.base.Strings;
+import com.meerkat.house.fut.exception.RestException;
+import com.meerkat.house.fut.exception.RestResponse;
+import com.meerkat.house.fut.exception.ResultCode;
+import com.meerkat.house.fut.model.oauth.OauthAccountRequest;
 import com.meerkat.house.fut.service.social.SocialSelectFactory;
 import com.meerkat.house.fut.service.social.oauth.OauthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+import javax.validation.Valid;
+
 @Slf4j
+@RestController
+@RequestMapping(value = "/oauth")
 public class OauthController {
 
     private OauthService oauthService;
@@ -16,18 +23,18 @@ public class OauthController {
     @Autowired
     private SocialSelectFactory socialSelectFactory;
 
-    @RequestMapping(value = "/login/{social}", method = RequestMethod.GET)
-    public String login(@PathVariable("social") String social) {
-        oauthService = socialSelectFactory.getSocialOauthService(social);
-        return "redirect:/" + oauthService.getCodeUrl();
-    }
+    @RequestMapping(value = "/account", method = RequestMethod.POST)
+    public RestResponse saveAccount(@RequestBody @Valid OauthAccountRequest oauthAccountRequest) {
 
-    @RequestMapping(value = "/oauth/codes/{social}", method = RequestMethod.GET)
-    public void oauthRedirectUrl(@PathVariable("social") String social,
-                                 @RequestParam("code") String code) {
-        oauthService = socialSelectFactory.getSocialOauthService(social);
-        Account account = oauthService.getUserModel(code);
+        String social = oauthAccountRequest.getSocial();
+        String accessToken = oauthAccountRequest.getAccessToken();
 
-        log.info("[ Account ] : {}", account.toString());
+        if(Strings.isNullOrEmpty(social) || Strings.isNullOrEmpty(accessToken)) {
+            log.info("social : {}, accessToken : {}", social, accessToken);
+            throw new RestException(ResultCode.INFORMATION_INSUFFICIENT);
+        }
+
+        oauthService = socialSelectFactory.getSocialOauthService(social);
+        return oauthService.upsertAccount(accessToken);
     }
 }

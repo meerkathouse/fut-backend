@@ -1,5 +1,7 @@
 package com.meerkat.house.fut.service.social;
 
+import com.meerkat.house.fut.exception.RestException;
+import com.meerkat.house.fut.exception.ResultCode;
 import com.meerkat.house.fut.service.social.oauth.OauthService;
 import com.meerkat.house.fut.service.social.oauth.impl.KakaoOauthServiceImpl;
 import com.meerkat.house.fut.utils.FutConstant;
@@ -21,6 +23,6 @@ public class SocialSelectFactory {
             case FutConstant.KAKAO:
                 return kakaoOauthServiceImpl;
         }
-        return null;
+        throw new RestException(ResultCode.INVALID_SOCIAL);
     }
 }

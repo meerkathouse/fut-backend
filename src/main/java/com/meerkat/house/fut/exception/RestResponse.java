@@ -12,4 +12,9 @@ import lombok.NoArgsConstructor;
 public class RestResponse {
     private int code;
     private String message;
+
+    public RestResponse(ResultCode resultCode) {
+        this.code = resultCode.getCode();
+        this.message = resultCode.getMessage();
+    }
 }

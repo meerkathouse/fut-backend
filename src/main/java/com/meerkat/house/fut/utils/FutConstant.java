@@ -10,4 +10,5 @@ public class FutConstant {
     //  kakao
     public static final String HOST_API = "https://kapi.kakao.com";
     public static final String API_USER_ME = "/v2/user/me";
+
 }
