@@ -27,14 +27,15 @@ public class OauthController {
     public RestResponse saveAccount(@RequestBody @Valid OauthAccountRequest oauthAccountRequest) {
 
         String social = oauthAccountRequest.getSocial();
+        String tokenType = oauthAccountRequest.getTokenType();
         String accessToken = oauthAccountRequest.getAccessToken();
 
-        if(Strings.isNullOrEmpty(social) || Strings.isNullOrEmpty(accessToken)) {
-            log.info("social : {}, accessToken : {}", social, accessToken);
+        if(Strings.isNullOrEmpty(social) || Strings.isNullOrEmpty(tokenType) || Strings.isNullOrEmpty(accessToken)) {
+            log.info("social : {}, tokenType : {}, accessToken : {}", social, tokenType, accessToken);
             throw new RestException(ResultCode.INFORMATION_INSUFFICIENT);
         }
 
         oauthService = socialSelectFactory.getSocialOauthService(social);
-        return oauthService.upsertAccount(accessToken);
+        return oauthService.upsertAccount(tokenType, accessToken);
     }
 }

@@ -1,13 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width"/>
+    <title>meerkat.house</title>
+    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+
 </head>
 <body>
-    <h1>Kakao</h1>
-    <a href="https://kauth.kakao.com/oauth/authorize?client_id=1b7affad8a0a6921b41a0e190b88f1f8&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Foauth%2Fcodes%2Fkakao&response_type=code">
-        <img src="/static/images/kakao.png"/>
-    </a>
+<a id="kakao-login-btn"></a>
+<a href="http://developers.kakao.com/logout">Logout</a>
+<span id="result"></span>
+<script type='text/javascript'>
+    //<![CDATA[
+    // 사용할 앱의 JavaScript 키를 설정해 주세요.
+    Kakao.init('6d7406ec1a6c46cc60852f55c50b1786');
+    // 카카오 로그인 버튼을 생성합니다.
+    Kakao.Auth.createLoginButton({
+        container: '#kakao-login-btn',
+        success: function(authObj) {
+            document.getElementById("result").innerText = JSON.stringify(authObj);
+        },
+        fail: function(err) {
+            alert(JSON.stringify(err));
+        }
+    });
+    //]]>
+</script>
+
 </body>
 </html>

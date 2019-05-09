@@ -17,21 +17,12 @@ public class Account extends BaseEntity{
     private Integer uid;
 
     private String id;
-    private String email;
-    private String password;
-    private String nickname;
-    private String name;
     private String social;
-
-    @Column(name = "client_type")
-    private String clientType;
+    private String email;
+    private String name;
+    private String nickname;
+    private String password;
 
     @Column(name = "image_url")
     private String imageUrl;
-
-    @Column(name = "access_token")
-    private String accessToken;
-
-    @Column(name = "refresh_token")
-    private String refreshToken;
 }

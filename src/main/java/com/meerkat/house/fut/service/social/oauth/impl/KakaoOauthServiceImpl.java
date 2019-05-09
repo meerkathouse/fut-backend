@@ -8,6 +8,7 @@ import com.meerkat.house.fut.model.oauth.kakao.KakaoUserResponse;
 import com.meerkat.house.fut.repository.AccountRepository;
 import com.meerkat.house.fut.service.social.oauth.OauthService;
 import com.meerkat.house.fut.utils.FutConstant;
+import com.sun.corba.se.impl.oa.toa.TOA;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -31,19 +32,21 @@ public class KakaoOauthServiceImpl implements OauthService {
         this.accountRepository = accountRepository;
     }
 
-    public RestResponse upsertAccount(String accessToken) {
+    public RestResponse upsertAccount(String tokenType, String accessToken) {
 
-        HttpHeaders headers = getHeaders(accessToken);
+        String token = setToken(tokenType, accessToken);
+
+        HttpHeaders headers = getHeaders(token);
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        String url = getUrl("https://kapi.kakao.com", "/oauth/authorize");
+        String url = getUrl(FutConstant.HOST_API, FutConstant.API_USER_ME);
 
         ResponseEntity<KakaoUserResponse> response = null;
 
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, entity, KakaoUserResponse.class);
         } catch (HttpClientErrorException | ResourceAccessException e) {
-            log.error("kakao get user : http client error");
+            log.error("kakao get user : http client error. cause : {}", e.toString());
             throw new RestException(ResultCode.KAKAO_HTTP_ERROR);
         }
 
@@ -69,6 +72,13 @@ public class KakaoOauthServiceImpl implements OauthService {
         headers.add("Authorization", token);
 
         return headers;
+    }
+
+    private String setToken(String type, String token) {
+        return new StringBuilder(type)
+                .append(" ")
+                .append(token)
+                .toString();
     }
 
     private KakaoUserResponse getKakaoResponse(ResponseEntity<KakaoUserResponse> response) {

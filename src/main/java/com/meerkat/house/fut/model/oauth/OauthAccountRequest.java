@@ -13,6 +13,9 @@ import java.io.Serializable;
 public class OauthAccountRequest implements Serializable {
 
     @NotNull
+    private String tokenType;
+
+    @NotNull
     private String accessToken;
 
     @NotNull
