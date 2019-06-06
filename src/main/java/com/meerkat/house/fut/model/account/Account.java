@@ -1,8 +1,9 @@
-package com.meerkat.house.fut.model;
+package com.meerkat.house.fut.model.account;
 
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Data
 @Builder
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @ToString
 @Entity
-public class Account extends BaseEntity{
+public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

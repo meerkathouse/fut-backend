@@ -1,6 +1,6 @@
 package com.meerkat.house.fut.repository;
 
-import com.meerkat.house.fut.model.Account;
+import com.meerkat.house.fut.model.account.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

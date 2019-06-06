@@ -1,8 +1,7 @@
 package com.meerkat.house.fut.service.social.oauth;
 
-import com.meerkat.house.fut.exception.RestResponse;
-import com.meerkat.house.fut.model.Account;
+import com.meerkat.house.fut.model.account.Account;
 
 public interface OauthService {
-    RestResponse upsertAccount(String tokenType, String accessToken);
+    Account upsertAccount(String tokenType, String accessToken);
 }
