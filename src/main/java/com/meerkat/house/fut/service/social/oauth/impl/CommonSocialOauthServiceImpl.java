@@ -1,12 +1,13 @@
 package com.meerkat.house.fut.service.social.oauth.impl;
 
 import com.meerkat.house.fut.model.account.Account;
-import com.meerkat.house.fut.model.account.AccountResponse;
 import com.meerkat.house.fut.service.social.oauth.CommonSocialOauthService;
 import com.meerkat.house.fut.service.jwt.JwtServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 
 @Slf4j
@@ -29,12 +30,7 @@ public class CommonSocialOauthServiceImpl implements CommonSocialOauthService {
     }
 
     @Override
-    public AccountResponse setAccessToken(Account account) {
-        String accessToken = jwtServiceImpl.setJwtToken(account);
-
-        return AccountResponse.builder()
-                .account(account)
-                .accessToken(accessToken)
-                .build();
+    public String setJwtToken(Account account, Date expireTime) {
+        return jwtServiceImpl.setJwtToken(account, expireTime);
     }
 }

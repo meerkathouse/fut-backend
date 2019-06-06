@@ -29,4 +29,5 @@ socials:
       user: /v2/user/me
 
 jwt:
-  secret_key: ENC(k4twR0AkqszAoIjTfAiqCK/VORPa+rdulIE3ecEYiwtab9ATfEyZnE4GcBOkv/EByOePW0oT53Y=)
+  signature:
+    key: ENC(k4twR0AkqszAoIjTfAiqCK/VORPa+rdulIE3ecEYiwtab9ATfEyZnE4GcBOkv/EByOePW0oT53Y=)

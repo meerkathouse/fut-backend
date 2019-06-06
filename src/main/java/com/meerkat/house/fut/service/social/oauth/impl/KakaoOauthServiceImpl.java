@@ -22,6 +22,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Slf4j
@@ -55,7 +56,7 @@ public class KakaoOauthServiceImpl implements OauthService {
         Account account = createAccount(kakaoUserResponse);
         accountRepository.save(account);
 
-        return commonSocialOauthService.setAccessToken(account);
+        return setAccountResponse(account);
     }
 
     private KakaoUserResponse callKakaoOauth(String token) {
@@ -125,6 +126,9 @@ public class KakaoOauthServiceImpl implements OauthService {
             account.setId(id);
             account.setEmail(email);
             account.setSocial(social);
+            account.setIsNeedRefresh(true);
+        } else {
+            account.setIsNeedRefresh(false);
         }
 
         account.setName(nickName);
@@ -132,5 +136,27 @@ public class KakaoOauthServiceImpl implements OauthService {
         account.setImageUrl(imageUrl);
 
         return account;
+    }
+
+    private AccountResponse setAccountResponse(Account account) {
+        AccountResponse accountResponse = new AccountResponse();
+        accountResponse.setAccount(account);
+        accountResponse.setTokenType(FutConstant.BEARER);
+
+        Long currentTime = System.currentTimeMillis();
+        Date accessExpireTime = new Date(currentTime + FutConstant.ACCESS_TOKEN_EXP_TIME);
+        Date refreshExpireTime = new Date(currentTime + FutConstant.REFRESH_TOKEN_EXP_TIME);
+
+        if(account.getIsNeedRefresh()) {
+            String refreshToken = commonSocialOauthService.setJwtToken(account, refreshExpireTime);
+            accountResponse.setRefreshToken(refreshToken);
+            accountResponse.setRefreshTokenExpireTime(refreshExpireTime.getTime());
+        }
+
+        String accessToken = commonSocialOauthService.setJwtToken(account, accessExpireTime);
+        accountResponse.setAccessToken(accessToken);
+        accountResponse.setAccessTokenExpireTime(accessExpireTime.getTime());
+
+        return accountResponse;
     }
 }

@@ -38,8 +38,8 @@ public class AccountController {
         return oauthService.upsertAccount(tokenType, accessToken);
     }
 
-    @RequestMapping(value = "/account", method = RequestMethod.GET)
-    public AccountResponse findAccount() {
+    @RequestMapping(value = "/account/{id}", method = RequestMethod.GET)
+    public AccountResponse findAccountById(@PathVariable("id") String uid) {
         return null;
     }
 }

@@ -25,4 +25,7 @@ public class Account {
 
     @Column(name = "image_url")
     private String imageUrl;
+
+    @Column(name = "is_need_refresh")
+    private Boolean isNeedRefresh = false;
 }
