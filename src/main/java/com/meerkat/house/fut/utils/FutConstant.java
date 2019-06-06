@@ -7,8 +7,10 @@ public class FutConstant {
     //  header
     public static final String AUTHORIZATION = "Authorization";
 
-    //  kakao
-    public static final String HOST_API = "https://kapi.kakao.com";
-    public static final String API_USER_ME = "/v2/user/me";
+    //  jwt
+    public static final String JWT_ID = "id";
+    public static final String JWT_EMAIL = "email";
+    public static final String JWT_SOCIAL = "social";
+    public static final String JWT_ROLE = "roles";
 
 }

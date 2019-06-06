@@ -1,9 +1,9 @@
-package com.meerkat.house.fut.controller.oauth;
+package com.meerkat.house.fut.controller.account;
 
 import com.google.common.base.Strings;
 import com.meerkat.house.fut.exception.RestException;
 import com.meerkat.house.fut.exception.ResultCode;
-import com.meerkat.house.fut.model.account.Account;
+import com.meerkat.house.fut.model.account.AccountResponse;
 import com.meerkat.house.fut.model.oauth.OauthAccountRequest;
 import com.meerkat.house.fut.service.social.SocialSelectFactory;
 import com.meerkat.house.fut.service.social.oauth.OauthService;
@@ -15,8 +15,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/oauth")
-public class OauthController {
+public class AccountController {
 
     private OauthService oauthService;
 
@@ -24,7 +23,7 @@ public class OauthController {
     private SocialSelectFactory socialSelectFactory;
 
     @RequestMapping(value = "/account", method = RequestMethod.POST)
-    public Account saveAccount(@RequestBody @Valid OauthAccountRequest oauthAccountRequest) {
+    public AccountResponse saveAccount(@RequestBody @Valid OauthAccountRequest oauthAccountRequest) {
 
         String social = oauthAccountRequest.getSocial();
         String tokenType = oauthAccountRequest.getTokenType();
@@ -37,5 +36,10 @@ public class OauthController {
 
         oauthService = socialSelectFactory.getSocialOauthService(social);
         return oauthService.upsertAccount(tokenType, accessToken);
+    }
+
+    @RequestMapping(value = "/account", method = RequestMethod.GET)
+    public AccountResponse findAccount() {
+        return null;
     }
 }

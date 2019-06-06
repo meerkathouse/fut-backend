@@ -27,3 +27,6 @@ socials:
     api:
       host: https://kapi.kakao.com
       user: /v2/user/me
+
+jwt:
+  secret_key: ENC(k4twR0AkqszAoIjTfAiqCK/VORPa+rdulIE3ecEYiwtab9ATfEyZnE4GcBOkv/EByOePW0oT53Y=)

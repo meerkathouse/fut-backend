@@ -4,10 +4,12 @@ import com.google.common.base.Strings;
 import com.meerkat.house.fut.exception.RestException;
 import com.meerkat.house.fut.exception.ResultCode;
 import com.meerkat.house.fut.model.account.Account;
+import com.meerkat.house.fut.model.account.AccountResponse;
+import com.meerkat.house.fut.model.oauth.kakao.KakaoUserAccountResponse;
 import com.meerkat.house.fut.model.oauth.kakao.KakaoUserProperties;
 import com.meerkat.house.fut.model.oauth.kakao.KakaoUserResponse;
 import com.meerkat.house.fut.repository.AccountRepository;
-import com.meerkat.house.fut.service.social.common.CommonSocialOauthService;
+import com.meerkat.house.fut.service.social.oauth.CommonSocialOauthService;
 import com.meerkat.house.fut.service.social.oauth.OauthService;
 import com.meerkat.house.fut.utils.FutConstant;
 import lombok.extern.slf4j.Slf4j;
@@ -44,21 +46,16 @@ public class KakaoOauthServiceImpl implements OauthService {
         this.commonSocialOauthService = commonSocialOauthService;
     }
 
-    public Account upsertAccount(String tokenType, String accessToken) {
+    public AccountResponse upsertAccount(String tokenType, String accessToken) {
 
         String token = commonSocialOauthService.setSocialToken(tokenType, accessToken);
 
         KakaoUserResponse kakaoUserResponse = callKakaoOauth(token);
 
         Account account = createAccount(kakaoUserResponse);
-
         accountRepository.save(account);
 
-        //  TODO.
-        //  create token
-        //  set session
-
-        return account;
+        return commonSocialOauthService.setAccessToken(account);
     }
 
     private KakaoUserResponse callKakaoOauth(String token) {
@@ -103,7 +100,9 @@ public class KakaoOauthServiceImpl implements OauthService {
         String id = optResponse.map(KakaoUserResponse::getId)
                 .orElse(null);
 
-        String email = null;
+        String email = optResponse.map(KakaoUserResponse::getKakaoAccount)
+                .map(KakaoUserAccountResponse::getEmail)
+                .orElse(null);
 
         String nickName = optResponse.map(KakaoUserResponse::getProperties)
                 .map(KakaoUserProperties::getNickname)
@@ -128,6 +127,7 @@ public class KakaoOauthServiceImpl implements OauthService {
             account.setSocial(social);
         }
 
+        account.setName(nickName);
         account.setNickname(nickName);
         account.setImageUrl(imageUrl);
 
