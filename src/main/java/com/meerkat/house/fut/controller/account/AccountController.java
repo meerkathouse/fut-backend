@@ -4,9 +4,9 @@ import com.google.common.base.Strings;
 import com.meerkat.house.fut.exception.RestException;
 import com.meerkat.house.fut.exception.ResultCode;
 import com.meerkat.house.fut.model.account.AccountResponse;
-import com.meerkat.house.fut.model.oauth.OauthAccountRequest;
-import com.meerkat.house.fut.service.social.SocialSelectFactory;
-import com.meerkat.house.fut.service.social.oauth.OauthService;
+import com.meerkat.house.fut.model.account.oauth.OauthAccountRequest;
+import com.meerkat.house.fut.service.account.SocialSelectFactory;
+import com.meerkat.house.fut.service.account.oauth.OauthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +30,7 @@ public class AccountController {
         String accessToken = oauthAccountRequest.getAccessToken();
 
         if(Strings.isNullOrEmpty(social) || Strings.isNullOrEmpty(tokenType) || Strings.isNullOrEmpty(accessToken)) {
-            log.error("social : {}, tokenType : {}, accessToken : {}", social, tokenType, accessToken);
+            log.error("account : {}, tokenType : {}, accessToken : {}", social, tokenType, accessToken);
             throw new RestException(ResultCode.INFORMATION_INSUFFICIENT);
         }
 
@@ -39,7 +39,7 @@ public class AccountController {
     }
 
     @RequestMapping(value = "/account/{id}", method = RequestMethod.GET)
-    public AccountResponse findAccountById(@PathVariable("id") String uid) {
-        return null;
+    public AccountResponse findAccountById(@PathVariable("id") Integer uid) {
+        return socialSelectFactory.getSocialOauthService("kakao").findAccountByUid(uid);
     }
 }

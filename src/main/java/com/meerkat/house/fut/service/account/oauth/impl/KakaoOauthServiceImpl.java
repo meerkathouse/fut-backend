@@ -1,16 +1,16 @@
-package com.meerkat.house.fut.service.social.oauth.impl;
+package com.meerkat.house.fut.service.account.oauth.impl;
 
 import com.google.common.base.Strings;
 import com.meerkat.house.fut.exception.RestException;
 import com.meerkat.house.fut.exception.ResultCode;
 import com.meerkat.house.fut.model.account.Account;
 import com.meerkat.house.fut.model.account.AccountResponse;
-import com.meerkat.house.fut.model.oauth.kakao.KakaoUserAccountResponse;
-import com.meerkat.house.fut.model.oauth.kakao.KakaoUserProperties;
-import com.meerkat.house.fut.model.oauth.kakao.KakaoUserResponse;
+import com.meerkat.house.fut.model.account.oauth.kakao.KakaoUserAccountResponse;
+import com.meerkat.house.fut.model.account.oauth.kakao.KakaoUserProperties;
+import com.meerkat.house.fut.model.account.oauth.kakao.KakaoUserResponse;
 import com.meerkat.house.fut.repository.AccountRepository;
-import com.meerkat.house.fut.service.social.oauth.CommonSocialOauthService;
-import com.meerkat.house.fut.service.social.oauth.OauthService;
+import com.meerkat.house.fut.service.account.oauth.CommonSocialOauthService;
+import com.meerkat.house.fut.service.account.oauth.OauthService;
 import com.meerkat.house.fut.utils.FutConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +72,7 @@ public class KakaoOauthServiceImpl implements OauthService {
         try {
             response = restTemplate.exchange(url, HttpMethod.GET, entity, KakaoUserResponse.class);
         } catch (HttpClientErrorException | ResourceAccessException e) {
-            log.error("[KAKAO] Call social server for user info. Cause : {}", e.toString());
+            log.error("[KAKAO] Call account server for user info. Cause : {}", e.toString());
             throw new RestException(ResultCode.KAKAO_HTTP_ERROR);
         }
 
@@ -127,8 +127,6 @@ public class KakaoOauthServiceImpl implements OauthService {
             account.setEmail(email);
             account.setSocial(social);
             account.setIsNeedRefresh(true);
-        } else {
-            account.setIsNeedRefresh(false);
         }
 
         account.setName(nickName);
@@ -158,5 +156,11 @@ public class KakaoOauthServiceImpl implements OauthService {
         accountResponse.setAccessTokenExpireTime(accessExpireTime.getTime());
 
         return accountResponse;
+    }
+
+    @Override
+    public AccountResponse findAccountByUid(Integer uid) {
+        Account account = accountRepository.findByUid(uid);
+        return setAccountResponse(account);
     }
 }

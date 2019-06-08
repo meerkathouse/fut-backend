@@ -1,9 +1,9 @@
-package com.meerkat.house.fut.service.social;
+package com.meerkat.house.fut.service.account;
 
 import com.meerkat.house.fut.exception.RestException;
 import com.meerkat.house.fut.exception.ResultCode;
-import com.meerkat.house.fut.service.social.oauth.OauthService;
-import com.meerkat.house.fut.service.social.oauth.impl.KakaoOauthServiceImpl;
+import com.meerkat.house.fut.service.account.oauth.OauthService;
+import com.meerkat.house.fut.service.account.oauth.impl.KakaoOauthServiceImpl;
 import com.meerkat.house.fut.utils.FutConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

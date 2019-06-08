@@ -1,7 +1,7 @@
-package com.meerkat.house.fut.service.social.oauth.impl;
+package com.meerkat.house.fut.service.account.oauth.impl;
 
 import com.meerkat.house.fut.model.account.Account;
-import com.meerkat.house.fut.service.social.oauth.CommonSocialOauthService;
+import com.meerkat.house.fut.service.account.oauth.CommonSocialOauthService;
 import com.meerkat.house.fut.service.jwt.JwtServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.meerkat.house.fut.model.oauth.kakao;
+package com.meerkat.house.fut.model.account.oauth.kakao;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

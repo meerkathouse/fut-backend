@@ -3,17 +3,18 @@ package com.meerkat.house.fut.utils;
 import java.util.Date;
 
 public class FutConstant {
-    //  social
+    //  account
     public static final String KAKAO = "kakao";
 
     //  header
     public static final String AUTHORIZATION = "Authorization";
+    public static final String UID = "uid";
     public static final String BEARER = "Bearer";
 
     //  jwt
     public static final String JWT_ID = "id";
     public static final String JWT_EMAIL = "email";
-    public static final String JWT_SOCIAL = "social";
+    public static final String JWT_SOCIAL = "account";
     public static final String JWT_ROLE = "roles";
 
     public static final String JWT_ISS = "dev.meerkat.house";

@@ -1,7 +1,6 @@
-package com.meerkat.house.fut.service.social.oauth;
+package com.meerkat.house.fut.service.account.oauth;
 
 import com.meerkat.house.fut.model.account.Account;
-import com.meerkat.house.fut.model.account.AccountResponse;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package com.meerkat.house.fut.model.oauth;
+package com.meerkat.house.fut.model.account.oauth;
 
 import lombok.*;
 

@@ -1,9 +1,11 @@
 package com.meerkat.house.fut.utils;
 
+import lombok.Data;
+
+@Data
 public class CurrentInfoUtils {
-    private static String UID;
+    private static Integer uid;
 
-    public static void setUID(String uid) { UID = uid; }
-    public static String getUID() { return UID; }
-
+    public static void setUid(Integer localUid) { uid = localUid; }
+    public static Integer getUid() { return uid;}
 }
