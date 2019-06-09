@@ -9,8 +9,9 @@ import java.util.List;
 @Repository
 public interface TeamMemberRepository extends JpaRepository<TeamMember, Integer> {
     List<TeamMember> findAll();
-    List<TeamMember> findAllByStatusAndTid(String status, Integer tid);
     List<TeamMember> findAllByUid(Integer uid);
+    List<TeamMember> findAllByTid(Integer tid);
+    List<TeamMember> findAllByStatusAndUid(String status, Integer uid);
 
     TeamMember findByTidAndUid(Integer tid, Integer uid);
 }

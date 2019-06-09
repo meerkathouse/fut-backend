@@ -2,6 +2,7 @@ package com.meerkat.house.fut.service.team.impl;
 
 import com.meerkat.house.fut.exception.RestException;
 import com.meerkat.house.fut.exception.ResultCode;
+import com.meerkat.house.fut.model.account.Account;
 import com.meerkat.house.fut.model.team.Team;
 import com.meerkat.house.fut.model.team_member.TeamMember;
 import com.meerkat.house.fut.model.team_member.TeamMemberResponse;
@@ -87,6 +88,12 @@ public class TeamMemberServiceImpl implements TeamMemberService {
             throw new RestException(ResultCode.UID_NOT_FOUND);
         }
 
+        Account account = accountRepository.findByUid(uid);
+        if( null == account) {
+            log.error("[TeamMember] Account not found");
+            throw new RestException(ResultCode.ACCOUNT_NOT_FOUND);
+        }
+
         List<TeamMember> teamMemberList = teamMemberRepository.findAllByUid(uid);
         return setTMResponseList(teamMemberList);
     }
@@ -98,7 +105,12 @@ public class TeamMemberServiceImpl implements TeamMemberService {
             throw new RestException(ResultCode.APPROVAL_REQUEST_NOT_FOUND);
         }
 
-        teamMember.setStatus("APPROVED");
+        if(teamMember.getStatus().equalsIgnoreCase(FutConstant.APPROVED)) {
+            log.error("[TeamMember] Already approved.");
+            throw new RestException(ResultCode.ALREADY_APPROVED);
+        }
+
+        teamMember.setStatus(status);
         return teamMember;
     }
 

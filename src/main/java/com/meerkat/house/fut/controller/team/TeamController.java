@@ -29,13 +29,13 @@ public class TeamController {
         return teamService.findAll();
     }
 
-    @RequestMapping(value = "/teams/mine", method = RequestMethod.GET)
-    public List<Team> findByMy() {
-        return teamService.findByUid();
-    }
-
     @RequestMapping(value = "/teams/{tid}", method = RequestMethod.DELETE)
     public RestResponse deleteTeam(@PathVariable("tid") Integer tid) {
         return teamService.deleteTeam(tid);
+    }
+
+    @RequestMapping(value = "/teams/mine", method = RequestMethod.GET)
+    public List<TeamResponse> findAllMine() {
+        return teamService.findAllMine();
     }
 }

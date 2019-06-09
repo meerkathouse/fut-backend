@@ -21,4 +21,7 @@ public class TeamMember {
     private Integer tid;
     private Integer uid;
     private String status;
+
+    @Column(name = "is_creator")
+    private Boolean isCreator = false;
 }

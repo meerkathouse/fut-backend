@@ -14,6 +14,7 @@ public enum ResultCode implements Code {
     AUTH_TOKEN_IS_NULL(4011002, "Token is null or empty"),
     AUTH_TOKEN_TYPE_IS_INVALID(4011003, "Token type is invalid"),
     AUTH_TOKEN_IS_INVALID(4011004, "Token is invalid"),
+    ALREADY_APPROVED(4011005, "Already approved"),
 
     FORBIDDEN(4031001, "FORBIDDEN"),
     INVALID_SOCIAL(4031002, "INVALID_SOCIAL"),
@@ -27,6 +28,7 @@ public enum ResultCode implements Code {
     TEAM_NOT_FOUND(4041006, "Team not found"),
     UID_NOT_FOUND(4041007, "Uid not found"),
     APPROVAL_REQUEST_NOT_FOUND(4041008, "Approval request not found"),
+    ACCOUNT_NOT_FOUND(4041009, "Account not found"),
 
     NO_NAMING(5001001, "NO_NAMING");
 

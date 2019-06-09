@@ -9,9 +9,7 @@ import java.util.List;
 
 public interface TeamService {
     TeamResponse upsertTeam(TeamRequest teamRequest);
-
     List<Team> findAll();
-    List<Team> findByUid();
-
+    List<TeamResponse> findAllMine();
     RestResponse deleteTeam(Integer tid);
 }

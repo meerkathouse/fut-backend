@@ -7,39 +7,58 @@ import com.meerkat.house.fut.exception.ResultCode;
 import com.meerkat.house.fut.model.team.Team;
 import com.meerkat.house.fut.model.team.TeamRequest;
 import com.meerkat.house.fut.model.team.TeamResponse;
+import com.meerkat.house.fut.model.team_member.TeamMember;
+import com.meerkat.house.fut.repository.TeamMemberRepository;
 import com.meerkat.house.fut.repository.TeamRepository;
 import com.meerkat.house.fut.service.team.TeamService;
 import com.meerkat.house.fut.utils.CurrentInfoUtils;
+import com.meerkat.house.fut.utils.FutConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
 public class TeamServiceImpl implements TeamService {
 
     private final TeamRepository teamRepository;
+    private final TeamMemberRepository teamMemberRepository;
 
     @Autowired
-    public TeamServiceImpl(TeamRepository teamRepository) {
+    public TeamServiceImpl(TeamRepository teamRepository, TeamMemberRepository teamMemberRepository) {
         this.teamRepository = teamRepository;
+        this.teamMemberRepository = teamMemberRepository;
     }
 
     @Override
     public TeamResponse upsertTeam(TeamRequest teamRequest) {
-        Team team = createTeam(teamRequest);
+        Integer uid = CurrentInfoUtils.getUid();
+        if (null == uid) {
+            log.error("[TEAM] Uid not found");
+            throw new RestException(ResultCode.UID_NOT_FOUND);
+        }
+
+        Team team = createTeam(uid, teamRequest);
         teamRepository.save(team);
 
-        return new TeamResponse(team.getTid(), ResultCode.SUCCESS_TEAM_CREATE);
+        saveTeamMember(uid, team.getTid());
+
+        return TeamResponse.builder()
+                .tid(team.getTid())
+                .code(ResultCode.SUCCESS_TEAM_CREATE)
+                .build();
     }
 
     @Override
     public List<Team> findAll() {
         List<Team> teamList = teamRepository.findAll();
-        if(teamList.isEmpty()) {
+        if (teamList.isEmpty()) {
             log.error("[Team] Find all. Team is empty");
             throw new RestException(ResultCode.TEAM_NOT_FOUND);
         }
@@ -48,17 +67,24 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public List<Team> findByUid() {
+    public List<TeamResponse> findAllMine() {
         Integer uid = CurrentInfoUtils.getUid();
         if (null == uid) {
-            log.error("[Team] Find by uid. Uid is null");
-            throw new RestException();
+            log.error("[TEAM] Uid not found");
+            throw new RestException(ResultCode.UID_NOT_FOUND);
         }
 
-        List<Team> teamList = teamRepository.findByUid(uid);
-        if(teamList.isEmpty()) {
-            log.error("[Team] Find by uid. Team is empty");
-            throw new RestException(ResultCode.TEAM_NOT_FOUND);
+        List<TeamResponse> teamList = new ArrayList<>();
+
+        List<TeamMember> teamMemberList = teamMemberRepository.findAllByStatusAndUid(FutConstant.APPROVED, uid);
+        for (TeamMember teamMember : teamMemberList) {
+            Team team = teamRepository.findByTid(teamMember.getTid());
+            TeamResponse teamResponse = TeamResponse.builder()
+                    .tid(team.getTid())
+                    .name(team.getName())
+                    .emblemUrl(team.getEmblemUrl())
+                    .build();
+            teamList.add(teamResponse);
         }
 
         return teamList;
@@ -78,17 +104,25 @@ public class TeamServiceImpl implements TeamService {
         }
 
         Integer uid = CurrentInfoUtils.getUid();
-        if (team.getUid() != uid) {
+        if(null == uid) {
+            log.error("[Team] Delete team. Uid not found");
+            throw new RestException(ResultCode.UID_NOT_FOUND);
+        }
+
+        if(team.getUid() != uid ) {
             log.error("[Team] Delete team. Invalid uid");
             throw new RestException(ResultCode.INVALID_UID);
         }
+
+        List<TeamMember> teamMemberList = teamMemberRepository.findAllByTid(team.getTid());
+        teamMemberRepository.deleteAll(teamMemberList);
 
         teamRepository.delete(team);
 
         return new RestResponse(ResultCode.SUCCESS_TEAM_DELETE);
     }
 
-    private Team createTeam(TeamRequest teamRequest) {
+    private Team createTeam(Integer uid, TeamRequest teamRequest) {
         Optional<TeamRequest> optRequest = Optional.ofNullable(teamRequest);
 
         String name = optRequest.map(TeamRequest::getName)
@@ -107,11 +141,6 @@ public class TeamServiceImpl implements TeamService {
             throw new RestException(ResultCode.TEAM_NAME_IS_NULL);
         }
 
-        Integer uid = CurrentInfoUtils.getUid();
-        if (null == uid) {
-            throw new RestException();
-        }
-
         Team team = teamRepository.findByNameAndUid(name, uid);
         if (team != null) {
             throw new RestException(ResultCode.TEAM_ALREADY_EXIST);
@@ -125,5 +154,21 @@ public class TeamServiceImpl implements TeamService {
         team.setGu(gu);
 
         return team;
+    }
+
+    private void saveTeamMember(Integer uid, Integer tid) {
+        try {
+            TeamMember teamMember = TeamMember.builder()
+                    .tid(tid)
+                    .uid(uid)
+                    .status(FutConstant.APPROVED)
+                    .isCreator(true)
+                    .build();
+
+            teamMemberRepository.save(teamMember);
+        } catch (Exception e) {
+            log.error("[TEAM] Create team. Save team member error. Cause : {}", e.toString());
+            throw new RestException();
+        }
     }
 }
