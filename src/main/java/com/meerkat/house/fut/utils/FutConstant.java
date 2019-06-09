@@ -23,4 +23,9 @@ public class FutConstant {
     public static final Long ACCESS_TOKEN_EXP_TIME = 1000 * 60 * 60 * 24L;
     public static final Long REFRESH_TOKEN_EXP_TIME = 1000 * 60 * 60 * 24 * 30L;
 
+
+    //  team member
+    public static final String APPROVING = "APPROVING";
+    public static final String APPROVED = "APPROVED";
+    public static final String REJECT = "REJECT";
 }

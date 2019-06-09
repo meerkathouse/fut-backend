@@ -1,0 +1,16 @@
+package com.meerkat.house.fut.repository;
+
+import com.meerkat.house.fut.model.team_member.TeamMember;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface TeamMemberRepository extends JpaRepository<TeamMember, Integer> {
+    List<TeamMember> findAll();
+    List<TeamMember> findAllByStatusAndTid(String status, Integer tid);
+    List<TeamMember> findAllByUid(Integer uid);
+
+    TeamMember findByTidAndUid(Integer tid, Integer uid);
+}

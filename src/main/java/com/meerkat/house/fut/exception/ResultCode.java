@@ -25,6 +25,8 @@ public enum ResultCode implements Code {
     TEAM_NAME_IS_NULL(4041004, "Team name is null or empty"),
     TID_IS_NULL(4041005, "Tid is null"),
     TEAM_NOT_FOUND(4041006, "Team not found"),
+    UID_NOT_FOUND(4041007, "Uid not found"),
+    APPROVAL_REQUEST_NOT_FOUND(4041008, "Approval request not found"),
 
     NO_NAMING(5001001, "NO_NAMING");
 

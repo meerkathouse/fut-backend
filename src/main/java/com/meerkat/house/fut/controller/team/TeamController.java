@@ -1,4 +1,4 @@
-package com.meerkat.house.fut.controller;
+package com.meerkat.house.fut.controller.team;
 
 import com.meerkat.house.fut.exception.RestResponse;
 import com.meerkat.house.fut.model.team.Team;
