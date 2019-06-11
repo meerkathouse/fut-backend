@@ -28,4 +28,9 @@ public class FutConstant {
     public static final String APPROVING = "APPROVING";
     public static final String APPROVED = "APPROVED";
     public static final String REJECT = "REJECT";
+
+    //  match vote
+    public static final String ATTEND = "ATTEND";
+    public static final String NOT_ATTEND = "NOT_ATTEND";
+    public static final String NO_DECISION = "NO_DECISION";
 }

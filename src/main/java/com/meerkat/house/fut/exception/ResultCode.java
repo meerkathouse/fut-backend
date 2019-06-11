@@ -4,6 +4,7 @@ public enum ResultCode implements Code {
     SUCCESS(200, "SUCCESS"),
     SUCCESS_TEAM_CREATE(2001001, "Success create team"),
     SUCCESS_TEAM_DELETE(2001002, "Success delete team"),
+    SUCCESS_UPDATE_VOTE_STATUS(2001003, "Success update vote status"),
 
     BAD_REQUEST(4001001, "BAD_REQUEST"),
     BAD_REQUEST_CUSTOM(4001002, "BAD_REQUEST_CUSTOM"),
@@ -15,10 +16,12 @@ public enum ResultCode implements Code {
     AUTH_TOKEN_TYPE_IS_INVALID(4011003, "Token type is invalid"),
     AUTH_TOKEN_IS_INVALID(4011004, "Token is invalid"),
     ALREADY_APPROVED(4011005, "Already approved"),
+    USER_NOT_A_MEMBER(4011006, "User is not a member"),
 
     FORBIDDEN(4031001, "FORBIDDEN"),
     INVALID_SOCIAL(4031002, "INVALID_SOCIAL"),
     INVALID_UID(4031003, "Invalid uid"),
+    INVALID_VOTE_STATUS(4031004, "Invalid vote status"),
 
     NOT_FOUND(4041001, "NOT_FOUND"),
     INFORMATION_INSUFFICIENT(4041002, "INFORMATION_INSUFFICIENT"),
@@ -29,6 +32,7 @@ public enum ResultCode implements Code {
     UID_NOT_FOUND(4041007, "Uid not found"),
     APPROVAL_REQUEST_NOT_FOUND(4041008, "Approval request not found"),
     ACCOUNT_NOT_FOUND(4041009, "Account not found"),
+    MATCH_VOTE_NOT_FOUND(4041010, "Match vote not found"),
 
     NO_NAMING(5001001, "NO_NAMING");
 

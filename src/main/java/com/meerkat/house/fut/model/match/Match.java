@@ -36,4 +36,13 @@ public class Match {
 
     @Column(name = "stm_lon")
     private Long stadiumLongitude;
+
+    @Column(name = "home_goals")
+    private Integer homeGoals = 0;
+
+    @Column(name = "away_goals")
+    private Integer awayGoals = 0;
+
+    @Column(name = "winner")
+    private Integer winner = 0;
 }
