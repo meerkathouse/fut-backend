@@ -25,4 +25,5 @@ public class MatchRequest implements Serializable {
     private String stadiumName;
     private Long stadiumLatitude;
     private Long stadiumLongitude;
+    private String status;
 }

@@ -5,11 +5,13 @@ public enum ResultCode implements Code {
     SUCCESS_TEAM_CREATE(2001001, "Success create team"),
     SUCCESS_TEAM_DELETE(2001002, "Success delete team"),
     SUCCESS_UPDATE_VOTE_STATUS(2001003, "Success update vote status"),
+    SUCCESS_MATCH_GAME_CREATE(2001004, "Success match game create"),
 
     BAD_REQUEST(4001001, "BAD_REQUEST"),
     BAD_REQUEST_CUSTOM(4001002, "BAD_REQUEST_CUSTOM"),
     KAKAO_HTTP_ERROR(4001003, "KAKAO_HTTP_ERROR"),
     TEAM_ALREADY_EXIST(4001004, "Already exist team"),
+    ALREADY_EXIST_MATCH_GAME(4001005, "Already exist match game"),
 
     AUTH_ERROR(4011001, "AUTH_ERROR"),
     AUTH_TOKEN_IS_NULL(4011002, "Token is null or empty"),
@@ -33,6 +35,8 @@ public enum ResultCode implements Code {
     APPROVAL_REQUEST_NOT_FOUND(4041008, "Approval request not found"),
     ACCOUNT_NOT_FOUND(4041009, "Account not found"),
     MATCH_VOTE_NOT_FOUND(4041010, "Match vote not found"),
+    MATCH_NOT_FOUND(4041011, "Match Not Found"),
+    MATCH_GAME_NOT_FOUND(4041012, "Match game not found"),
 
     NO_NAMING(5001001, "NO_NAMING");
 

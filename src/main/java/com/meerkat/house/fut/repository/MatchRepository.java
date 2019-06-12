@@ -9,4 +9,7 @@ import java.util.List;
 @Repository
 public interface MatchRepository extends JpaRepository<Match, Integer> {
     List<Match> findAll();
+    List<Match> findByHomeTid(int tid);
+
+    Match findByMid(Integer mid);
 }

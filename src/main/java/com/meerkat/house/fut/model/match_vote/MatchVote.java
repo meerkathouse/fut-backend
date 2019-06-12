@@ -1,5 +1,6 @@
 package com.meerkat.house.fut.model.match_vote;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.meerkat.house.fut.utils.FutConstant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +16,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Entity
 @Table(name = "match_vote")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MatchVote {
 
     @Id

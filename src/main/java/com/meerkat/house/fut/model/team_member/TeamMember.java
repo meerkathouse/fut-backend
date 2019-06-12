@@ -1,5 +1,6 @@
 package com.meerkat.house.fut.model.team_member;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TeamMember {
 
     @Id

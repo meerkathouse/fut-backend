@@ -15,14 +15,19 @@ import com.meerkat.house.fut.repository.TeamMemberRepository;
 import com.meerkat.house.fut.repository.TeamRepository;
 import com.meerkat.house.fut.service.match.MatchService;
 import com.meerkat.house.fut.utils.CurrentInfoUtils;
+import com.meerkat.house.fut.utils.FutConstant;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -62,6 +67,31 @@ public class MatchServiceImpl implements MatchService {
                 .build();
     }
 
+    @Override
+    public Match endMatch(int mid) {
+        Match match = matchRepository.findByMid(mid);
+        if (null == match) {
+            log.error("[Match] Match not found");
+            throw new RestException(ResultCode.MATCH_NOT_FOUND);
+        }
+
+        updateEndMatch(match);
+        return match;
+    }
+
+    @Override
+    public List<Match> getMatchesByTid(Integer tid, Integer year) {
+        Team team = teamRepository.findByTid(tid);
+        if (null == team) {
+            log.error("[Match] Find matches by tid.");
+            throw new RestException(ResultCode.TEAM_NOT_FOUND);
+        }
+
+        //  TODO. paging by year
+        List<Match> matchList = matchRepository.findByHomeTid(tid);
+        return matchList;
+    }
+
     private String getHomeName(MatchRequest matchRequest) {
         String homeName = matchRequest.getHomeName();
 
@@ -92,9 +122,14 @@ public class MatchServiceImpl implements MatchService {
                 .homeTid(matchRequest.getHomeTid())
                 .homeName(homeName)
                 .awayName(matchRequest.getAwayName())
+                .matchDate(System.currentTimeMillis())
                 .stadiumName(matchRequest.getStadiumName())
                 .stadiumLatitude(matchRequest.getStadiumLatitude())
                 .stadiumLongitude(matchRequest.getStadiumLongitude())
+                .homeGoals(0)
+                .awayGoals(0)
+                .status(FutConstant.BEFORE)
+                .winner(FutConstant.DRAW)
                 .build();
         return match;
     }
@@ -115,6 +150,16 @@ public class MatchServiceImpl implements MatchService {
         }
 
         return matchVoteList;
+    }
+
+    private void updateEndMatch(Match match) {
+        int homeGoals = match.getHomeGoals();
+        int awayGoals = match.getAwayGoals();
+        int winner = homeGoals > awayGoals ? FutConstant.HOME_WIN : homeGoals == awayGoals ? FutConstant.DRAW : FutConstant.AWAY_WIN;
+
+        match.setWinner(winner);
+        match.setStatus(FutConstant.END);
+        matchRepository.save(match);
     }
 
     private void sendPushVotes(List<MatchVote> matchVoteList) {

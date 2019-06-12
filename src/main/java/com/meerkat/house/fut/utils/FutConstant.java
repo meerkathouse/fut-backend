@@ -29,6 +29,15 @@ public class FutConstant {
     public static final String APPROVED = "APPROVED";
     public static final String REJECT = "REJECT";
 
+    //  match
+    public static final Integer DRAW = 0;
+    public static final Integer HOME_WIN = 1;
+    public static final Integer AWAY_WIN = 2;
+
+    public static final String BEFORE = "BEFORE";
+    public static final String PLAYING = "PLAYING";
+    public static final String END = "END";
+
     //  match vote
     public static final String ATTEND = "ATTEND";
     public static final String NOT_ATTEND = "NOT_ATTEND";

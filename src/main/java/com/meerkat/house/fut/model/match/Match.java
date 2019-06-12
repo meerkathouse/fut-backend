@@ -1,11 +1,14 @@
 package com.meerkat.house.fut.model.match;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @Builder
@@ -13,6 +16,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "fut_match")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Match {
 
     @Id
@@ -38,11 +42,17 @@ public class Match {
     private Long stadiumLongitude;
 
     @Column(name = "home_goals")
-    private Integer homeGoals = 0;
+    private Integer homeGoals;
 
     @Column(name = "away_goals")
-    private Integer awayGoals = 0;
+    private Integer awayGoals;
 
     @Column(name = "winner")
-    private Integer winner = 0;
+    private Integer winner;
+
+    @Column(name = "status")
+    private String status;
+
+    @Column(name = "match_date")
+    private Long matchDate;
 }
